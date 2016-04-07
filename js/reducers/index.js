@@ -25,11 +25,10 @@ export function players(state = [], action) {
       }
       return state
     case 'ADD_PLAYER':
-      let id = state.length > 0 ? getNextId(state) : 1
       return [
         ...state,
         {
-          id: id,
+          id: state.length > 0 ? getNextId(state) : 1, // This is naive because it assumes you won't delete all your players
           name: action.name,
           rank: state.length + 1
         }

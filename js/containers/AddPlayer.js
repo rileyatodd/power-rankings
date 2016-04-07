@@ -6,13 +6,13 @@ let AddPlayer = ({ dispatch }) => {
   let input
 
   return (
-    <div>
+    <div style={{width: '160px'}}>
       <input ref={node => {input = node}} />
-      <button onClick={() => {
+      <button style={{width: '19px', height: '19px'}} onClick={() => {
         dispatch(addPlayer(input.value))
         input.value = ''
       }}>
-        Add Player 
+        +
       </button>
     </div>
   )
