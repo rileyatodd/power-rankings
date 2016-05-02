@@ -1,10 +1,17 @@
 import { combineReducers } from 'redux'
-import { reduce, compose, merge, max, map, add, curry } from 'ramda'
+import { reduce, compose, merge, max, map, add, curry, prop, find, equals } from 'ramda'
 
+// Number a :: [a] -> a
 const arrayMax = reduce((acc, x) => max(acc, x), -Infinity)
 
-const getNextId = compose(add(1), arrayMax, map(x => x.id))
+// This is naive because it doesn't worry about collisions in the persistence layer
+// Int b :: [a] -> b
+const getNextId = compose(add(1), max(0), arrayMax, map(prop('id')))
 
+// Integer a :: a -> b -> Bool
+const hasId = curry((id, x) => id === x.id)
+
+// Player a :: a -> a -> a -> a
 const updateRank = curry(function(winner, loser, player){
   if (player.id === winner.id) {
     return merge(player, {rank: loser.rank}) 
@@ -15,20 +22,21 @@ const updateRank = curry(function(winner, loser, player){
   return player
 })
 
+// Player a :: [a] -> [a]
 export function players(state = [], action) {
   switch (action.type) {
     case 'RECORD_MATCH':
-      let winner = state.find(player => player.id == action.winnerId)
-      let loser = state.find(player => player.id == action.loserId)
+      let winner = find(hasId(action.winnerId), state)
+      let loser = find(hasId(action.loserId), state)
       if (winner.rank > loser.rank) {
-        return state.map(updateRank(winner, loser))
+        return map(updateRank(winner, loser), state)
       }
       return state
     case 'ADD_PLAYER':
       return [
         ...state,
         {
-          id: state.length > 0 ? getNextId(state) : 1, // This is naive because it assumes you won't delete all your players
+          id: getNextId(state),
           name: action.name,
           rank: state.length + 1
         }
