@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
-import { reduce, compose, merge, max, map, add, curry, prop, find, equals } from 'ramda'
+import { reduce, compose, merge, max, 
+         map, add, curry, prop, find } from 'ramda'
 
 // Number a :: [a] -> a
 const arrayMax = reduce((acc, x) => max(acc, x), -Infinity)
@@ -13,8 +14,11 @@ const hasId = curry((id, x) => id === x.id)
 
 // Player a :: a -> a -> a -> a
 const updateRank = curry(function(winner, loser, player){
-  if (player.id === winner.id) {
-    return merge(player, {rank: loser.rank}) 
+  if (winner.rank < loser.rank) {
+    return player
+  }
+  if (player.id == winner.id) {
+    return merge(player, {rank: loser.rank})
   }
   if (player.rank < winner.rank && player.rank >= loser.rank) {
     return merge(player, {rank: player.rank + 1})
@@ -28,10 +32,7 @@ export function players(state = [], action) {
     case 'RECORD_MATCH':
       let winner = find(hasId(action.winnerId), state)
       let loser = find(hasId(action.loserId), state)
-      if (winner.rank > loser.rank) {
-        return map(updateRank(winner, loser), state)
-      }
-      return state
+      return map(updateRank(winner, loser), state)
     case 'ADD_PLAYER':
       return [
         ...state,
