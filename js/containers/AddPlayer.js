@@ -18,6 +18,4 @@ let AddPlayer = ({ dispatch }) => {
   )
 }
 
-AddPlayer = connect()(AddPlayer)
-
-export default AddPlayer
+export default connect()(AddPlayer)
