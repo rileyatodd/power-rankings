@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { reduce, compose, merge, max, 
-         map, add, curry, prop, find,
+         map, add, curry, prop,
          set, lensIndex, findIndex,
          filter, lensProp, maxBy,
          minBy, concat } from 'ramda'
@@ -29,20 +29,24 @@ const updateRank = curry(function(winner, loser, player){
 // Player p :: p -> p
 const clearSelected = set(lensProp('selected'), false)
 
+// Player p :: p -> p
+const clearScore = set(lensProp('score'), false)
+
+const clearInput = compose(clearSelected, clearScore)
+
 // Player a :: [a] -> [a]
 export function players(state = [], action) {
 
   let playerLens = lensIndex(findIndex(hasId(action.id), state))
 
   switch (action.type) {
-
-    case 'RECORD_MATCH':
+    case 'RECORD_MATCH': {
       let competitors = filter((p) => p.selected, state)
       let winner = maxBy(prop('score'), ...competitors)
       let loser = minBy(prop('score'), ...competitors)
-      return compose(map(clearSelected), map(updateRank(winner, loser)))(state)
-
-    case 'ADD_PLAYER':
+      return map(compose(clearInput, updateRank(winner, loser)), state)
+    }
+    case 'ADD_PLAYER': {
       return concat(
         state,
         {
@@ -51,15 +55,16 @@ export function players(state = [], action) {
           rank: state.length + 1
         }
       )
-
-    case 'SELECT_PLAYER':
+    }
+    case 'SELECT_PLAYER': {
       let playerSelected = compose(playerLens, lensProp('selected'))
       return set(playerSelected, true, state)
-    case 'UPDATE_SCORE':
+    }
+    case 'UPDATE_SCORE': {
       let playerScore = compose(playerLens, lensProp('score'))
       return set(playerScore, action.score, state)
-    default:
-      return state
+    }
+    default: return state
   }
 }
 

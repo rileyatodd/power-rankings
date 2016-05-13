@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { addPlayer } from '../actions/'
 
@@ -16,6 +16,10 @@ let AddPlayer = ({ dispatch }) => {
       </button>
     </div>
   )
+}
+
+AddPlayer.propTypes = {
+  dispatch: PropTypes.func.isRequired
 }
 
 export default connect()(AddPlayer)

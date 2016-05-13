@@ -1,6 +1,5 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { compose, map, sort, curry } from 'ramda'
+import React, { PropTypes } from 'react'
+import { map, curry } from 'ramda'
 
 const renderPlayer = curry((handleClick, onChange, player) => (
   <li key={player.id} style={{padding: '5px 0'}} onClick={() => handleClick(player.id)}>
@@ -17,5 +16,12 @@ let Ladder = ({ items, onPlayerClick, onScoreChange, onSubmit }) => (
     <button onClick={onSubmit}>Submit Match</button>
   </div>
 )
+
+Ladder.propTypes = {
+  items: PropTypes.array.isRequired,
+  onPlayerClick: PropTypes.func,
+  onScoreChange: PropTypes.func,
+  onSubmit: PropTypes.func
+}
 
 export default Ladder
