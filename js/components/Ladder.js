@@ -1,10 +1,14 @@
 import React, { PropTypes } from 'react'
 import { map, curry } from 'ramda'
 
+let scoreInputStyle = (player) => ({float: 'right', width: '30px', display: player.selected ? 'block' : 'none'})
+
 const renderPlayer = curry((handleClick, onChange, player) => (
   <li key={player.id} style={{padding: '5px 0'}} onClick={() => handleClick(player.id)}>
     {player.name}
-    <input value={player.score} onChange={(e) => onChange(player.id, e.target.value)} style={{float: 'right', width: '30px', display: player.selected ? 'block' : 'none'}} type="number" />
+    <input value={player.score} type="number"
+           onChange={(e) => onChange(player.id, e.target.value)} 
+           style={scoreInputStyle(player)} />
   </li>
 ))
 

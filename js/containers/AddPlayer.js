@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { addPlayer } from '../actions/'
+import { postAddPlayer } from '../actions/'
 
 let AddPlayer = ({ dispatch }) => {
   let input
@@ -9,7 +9,7 @@ let AddPlayer = ({ dispatch }) => {
     <div style={{width: '160px'}}>
       <input ref={node => {input = node}} />
       <button style={{width: '19px', height: '19px'}} onClick={() => {
-        dispatch(addPlayer(input.value))
+        dispatch(postAddPlayer(input.value))
         input.value = ''
       }}>
         +
