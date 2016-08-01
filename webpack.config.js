@@ -10,7 +10,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'public', 'javascripts'),
     filename: 'bundle.js',
-    publicPath: '/public/javascripts'
+    publicPath: '/javascripts'
   },
   plugins: process.env.NODE_ENV != 'production' ?
              [new webpack.optimize.OccurenceOrderPlugin(), new webpack.HotModuleReplacementPlugin()] :
