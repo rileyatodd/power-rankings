@@ -1,15 +1,9 @@
 var express = require('express');
-var webpack = require('webpack');
-var webpackDevMiddleware = require('webpack-dev-middleware');
-var webpackHotMiddleware = require('webpack-hot-middleware');
-var webpackConfig = require('./webpack.config');
 var path = require('path');
 // var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-var compiler = webpack(webpackConfig);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -20,8 +14,13 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
-app.use(webpackHotMiddleware(compiler));
+if (app.get('env') === 'development') {
+  var webpackConfig = require('./webpack.config')
+  var compiler = require('webpack')(webpackConfig)
+
+  app.use(require('webpack-dev-middleware')(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }))
+  app.use(require('webpack-hot-middleware')(compiler))
+}
 
 
 // uncomment after placing your favicon in /public
