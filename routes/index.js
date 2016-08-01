@@ -3,8 +3,8 @@ var router = express.Router()
 var db = require('mysql')
 
 var dbConfig = {
-  host: 'rileyatodd.com',
-  user: process.env.DB_USER,
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'power_rankings',
   password: process.env.DB_PASSWORD,
   database: 'power_rankings'
 }
@@ -12,7 +12,7 @@ var dbConfig = {
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Power Rankings' })
-});
+})
 
 router.post('/action', (req, res, next) => {
   var connection = db.createConnection(dbConfig);

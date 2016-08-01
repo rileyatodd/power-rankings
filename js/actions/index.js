@@ -1,5 +1,5 @@
-import { chain, filter, compose, map, prop } from 'ramda'
-import { getJSON, postJSON } from '../util'
+import { compose, map, prop } from 'ramda'
+import { throwErr, getJSON, postJSON } from '../util'
 
 export const RECORD_MATCH = 'RECORD_MATCH'
 export const ADD_PLAYER = 'ADD_PLAYER'
@@ -9,47 +9,30 @@ export const UPDATE_SCORE = 'UPDATE_SCORE'
 export const SERVER_REQUEST = 'SERVER_REQUEST'
 export const SERVER_RESPONSE = 'SERVER_RESPONSE'
 
-const postAction = (action) => fetch('http://localhost:3000/action', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(action)
-})
+const postAction = action => postJSON('http://localhost:3000/action', action)
 
-const postAction2 = action => postJSON('http://localhost:3000/action', action)
+const apiRequest = actionCreator => actionArg => (
+  (dispatch, getState) => {
+    dispatch(beginServerRequest())
+    let action = actionCreator(actionArg)
+    postAction(action).fork(
+      (err) => {
+        dispatch(receiveServerResponse())
+        throw err
+      },
+      () => {
+        dispatch(receiveServerResponse())
+        dispatch(action)
+      }
+    )
+  }
+)
 
-const apiRequest = (dispatch, action) => {
-  dispatch(beginServerRequest())
-  return postAction(action)
-    .then(() => dispatch(receiveServerResponse()))
-    .then(() => dispatch(action))
-}
-
-
-export const wrapAsync = (dispatch, asyncFunction) => {
-  dispatch(beginServerRequest())
-  return chain(compose(dispatch, receiveServerResponse), asyncFunction())
-}
-
-const apiRequest2 = (dispatch, action) => {
-  dispatch(beginServerRequest())
-  postAction2(action).fork(
-    (err) => {
-      dispatch(receiveServerResponse())
-      throw err
-    },
-    () => {
-      dispatch(receiveServerResponse())
-      dispatch(action)
-    }
-  )
-}
-
-export function recordMatch(competitors) {
+export function recordMatch({ winner, loser }) {
   return {
     type: RECORD_MATCH,
-    competitors
+    winner,
+    loser
   }
 }
 
@@ -60,18 +43,10 @@ export function addPlayer(name) {
   }
 }
 
-export function selectPlayer(id) {
-  return {
-    type: SELECT_PLAYER,
-    id
-  }
-}
-
 export function updateScore(id, score) {
   return {
     type: UPDATE_SCORE,
-    id,
-    score: parseInt(score)
+    player: {id, score}
   }
 }
 
@@ -87,22 +62,14 @@ export function receiveServerResponse() {
   }
 }
 
-export function postAddPlayer(name) {
-  return (dispatch) => {
-    return apiRequest(dispatch, addPlayer(name))
-  }
-}
+export const postAddPlayer = apiRequest(addPlayer);
 
-export function postMatch() {
-  return (dispatch, getState) => {
-    return apiRequest(dispatch, recordMatch(filter((p) => p.selected, getState().players)))
-  }
-}
+export const postMatch = apiRequest(recordMatch);
 
 export function hydrateState() {
   return (dispatch) => {
     return getJSON('http://localhost:3000/actions').fork(
-      (err) => {throw err},
+      throwErr,
       map(compose(dispatch, JSON.parse, prop('json')))
     )
   }

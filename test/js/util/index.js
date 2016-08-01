@@ -1,6 +1,7 @@
 import { request, getJSON } from '../../../js/util/'
 import test from 'tape'
 import 'isomorphic-fetch'
+import { prop } from 'ramda'
 
 test('request returns a Task Error Response', (t) => {
   request('http://localhost:3000/actions', {}).fork(
@@ -27,4 +28,8 @@ test('getJSON returns a Task Error Object', (t) => {
     (response) => t.ok(typeof response === 'object', 'result clause of fork is handed an object')
   )
   t.end()
+})
+
+test('prop works on arrays', (t) => {
+  t.equal(prop(1)[1,2,3], 1, 'prop(1) of [1,2,3] is 1')
 })

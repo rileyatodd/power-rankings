@@ -1,19 +1,19 @@
 import Task from 'data.task'
-import { chain, compose, curry, flip } from 'ramda'
+import { add, max, apply, prop, map, identity, chain, compose, curry, flip } from 'ramda'
 
-export var trace = curry((tag, x) => {
+export const trace = curry((tag, x) => {
   console.log(tag, x)
   return x
 })
 
-// Promise a -> Task Error a 
-export var taskFromPromise = promise => new Task((reject, result) => promise.then(result).catch(reject))
+// Promise a -> Task Error a
+export const taskFromPromise = promise => new Task((reject, result) => promise.then(result).catch(reject))
 
 // String -> Object -> Task Error Response
-export var request = curry((url, params) => taskFromPromise(fetch(url, params)))
+export const request = curry((url, params) => taskFromPromise(fetch(url, params)))
 
 // URL -> Object -> Task Error Response
-export var postJSON = (url, data) => request(url, {
+export const postJSON = (url, data) => request(url, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -21,8 +21,21 @@ export var postJSON = (url, data) => request(url, {
   body: JSON.stringify(data)
 })
 
+export const throwErr = (err) => {throw err;}
+
 // Response -> Task Error Object
 const getResponseJSON = (response) => taskFromPromise(response.json())
 
 // URL -> Task Error Object
-export var getJSON = compose(chain(getResponseJSON), flip(request)({method: 'GET'}))
+export const getJSON = compose(chain(getResponseJSON), flip(request)({method: 'GET'}))
+
+export const mapped = curry(
+  (f, x) => identity( map( compose( x=>x.value, f), x) )
+);
+
+// Integer a :: a -> b -> Bool
+export const hasId = curry((id, x) => id === x.id)
+
+// This is naive because it doesn't worry about collisions in the persistence layer
+// Int b :: [a] -> b
+export const getNextId = compose(add(1), max(0), apply(Math.max), map(prop('id')))

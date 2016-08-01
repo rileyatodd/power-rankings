@@ -20,12 +20,18 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loaders: [ 'babel' ],
+        loaders: ['react-hot', 'babel'],
         exclude: /node_modules/,
         include: __dirname
       }, {
         test: require.resolve('./js/index.js'),
         loader: 'expose?game!babel'
+      }, {
+        test: require.resolve('./js/model/index.js'),
+        loader: 'expose?model!babel'
+      }, {
+        test: /\.css$/,
+        loader: 'style!css?modules'
       }
     ]
   }

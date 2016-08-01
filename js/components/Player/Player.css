@@ -1,0 +1,19 @@
+.player {
+  border-bottom: 2px solid #1876ea;
+  padding: 5px;
+}
+
+.rank {
+  color: #1876ea;
+  float: left;
+}
+
+.record {
+  font-size: 12px;
+  font-style: italic;
+}
+
+.input {
+  float: right;
+  width: 30px;
+}

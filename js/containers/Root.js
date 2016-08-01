@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { Provider } from 'react-redux'
-import AddPlayer from './AddPlayer'
 import PlayerLadder from './PlayerLadder'
 
 export default class Root extends Component {
@@ -10,7 +9,6 @@ export default class Root extends Component {
       <Provider store={store}>
         <div>
           <PlayerLadder />
-          <AddPlayer />
         </div>
       </Provider>
     )

@@ -1,0 +1,31 @@
+.container {
+  width: 500px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.controlsContainer input {
+  line-height: 20px;
+  font-size: 15px;
+}
+
+.controlsContainer button {
+  line-height: 20px;
+  font-size: 15px;
+  padding: 3px 6px;
+}
+
+.submitButton {
+  composes: btn from '../../../public/stylesheets/style.css';
+  background: #1876ea;
+  color: #fff;
+  float: right;
+  cursor: pointer;
+  line-height: 20px;
+  font-size: 15px;
+}
