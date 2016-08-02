@@ -1,5 +1,5 @@
 import { compose, map, prop } from 'ramda'
-import { throwErr, getJSON, postJSON } from '../util'
+import { throwErr, getJSON, postJSON } from 'util'
 
 export const RECORD_MATCH = 'RECORD_MATCH'
 export const ADD_PLAYER = 'ADD_PLAYER'

@@ -33,5 +33,16 @@ module.exports = {
         loader: 'style!css?modules'
       }
     ]
+  },
+  resolve: {
+    alias: {
+      actions: path.resolve(__dirname, 'js', 'actions'),
+      components: path.resolve(__dirname, 'js', 'components'),
+      containers: path.resolve(__dirname, 'js', 'containers'),
+      model: path.resolve(__dirname, 'js', 'model'),
+      reducers: path.resolve(__dirname, 'js', 'reducers'),
+      store: path.resolve(__dirname, 'js', 'store'),
+      util: path.resolve(__dirname, 'js', 'util')
+    }
   }
 }

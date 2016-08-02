@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'ramda'
-import { updateScore } from '../../actions/'
+import { updateScore } from 'actions'
 import styles from './Player.css'
 
 const Player = ({ id, score, name, rank, formId, updateScore, record: { wins, losses } }) => (

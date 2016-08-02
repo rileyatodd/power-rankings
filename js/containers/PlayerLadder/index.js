@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { map, compose, sortBy, values, prop } from 'ramda'
-import { postMatch, recordMatch } from '../../actions/'
-import { findWinnerAndLoser } from '../../model'
-import Player from '../../components/Player'
-import AddPlayer from '../../components/AddPlayer'
+import { postMatch, recordMatch } from 'actions'
+import { findWinnerAndLoser } from 'model'
+import Player from 'components/Player'
+import AddPlayer from 'components/AddPlayer'
 import styles from './PlayerLadder.css'
 
 const Ladder = ({ players, recordMatch }) => (

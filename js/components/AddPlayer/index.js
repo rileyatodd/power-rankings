@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'ramda'
-import { addPlayer, postAddPlayer } from '../../actions/'
+import { addPlayer, postAddPlayer } from 'actions'
 import styles from './AddPlayer.css'
 
 let AddPlayer = ({ addPlayer }) => {

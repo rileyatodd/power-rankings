@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { compose, map, set, lensProp, assoc, assocPath, dissoc, values } from 'ramda'
-import { updateRank, updateRecord } from '../model'
-import { getNextId } from '../util'
+import { updateRank, updateRecord } from 'model'
+import { getNextId } from 'util'
 
 // Player a :: [a] -> [a]
 export function players(state = {}, action) {
